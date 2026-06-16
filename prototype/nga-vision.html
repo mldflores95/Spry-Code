@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spry Methods | NGA VISION — Data Scientist, UI/UX Designer & Mission Advocacy</title>
+  <meta name="description" content="Spry Methods capability statement for NGA PEO-GG VISION program — RFI1812879" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ===== RESET & BASE ===== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --navy:      #060e1f;
+      --navy-mid:  #0c1a30;
+      --navy-card: #0f2040;
+      --blue:      #1a4b8c;
+      --blue-lt:   #2563c8;
+      --teal:      #1e8fa8;
+      --gold:      #c8922a;
+      --gold-lt:   #e8b04a;
+      --gold-dim:  #9b6e1e;
+      --white:     #f0f4ff;
+      --muted:     #8ea8cc;
+      --text:      #cad9f0;
+      --border:    rgba(100,150,220,.18);
+      --glow-blue: rgba(37,99,200,.25);
+      --glow-gold: rgba(200,146,42,.20);
+      --radius:    12px;
+      --radius-lg: 20px;
+      --font:      'Inter', sans-serif;
+      --font-head: 'Space Grotesk', sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--navy);
+      color: var(--text);
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+    h1,h2,h3,h4,h5 { font-family: var(--font-head); color: var(--white); }
+    a { color: var(--gold-lt); text-decoration: none; }
+    a:hover { color: var(--white); }
+    img { max-width: 100%; display: block; }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--navy); }
+    ::-webkit-scrollbar-thumb { background: var(--blue); border-radius: 4px; }
+
+    /* ===== UTILITIES ===== */
+    .container { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+    .section { padding: 96px 0; }
+    .section-sm { padding: 64px 0; }
+    .label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: .72rem; font-weight: 700; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--gold-lt);
+      margin-bottom: 14px;
+    }
+    .label::before { content: ''; width: 20px; height: 2px; background: var(--gold); border-radius: 2px; }
+    .section-title {
+      font-size: clamp(1.9rem, 4vw, 2.9rem);
+      font-weight: 700; line-height: 1.15;
+      margin-bottom: 18px;
+    }
+    .section-sub {
+      font-size: 1.05rem; color: var(--muted); max-width: 640px; margin-bottom: 56px;
+    }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    @media (max-width: 900px) {
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+      .grid-3, .grid-2 { grid-template-columns: 1fr; }
+      .section { padding: 64px 0; }
+    }
+
+    /* ===== GLASS CARD ===== */
+    .card {
+      background: linear-gradient(135deg, rgba(12,26,48,.9) 0%, rgba(15,32,64,.8) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(37,99,200,.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 16px 48px rgba(0,0,0,.4), 0 0 0 1px rgba(37,99,200,.2); }
+
+    .card-gold {
+      background: linear-gradient(135deg, rgba(20,15,5,.95) 0%, rgba(30,24,8,.9) 100%);
+      border-color: rgba(200,146,42,.25);
+    }
+    .card-gold::before { background: linear-gradient(135deg, rgba(200,146,42,.06) 0%, transparent 60%); }
+
+    /* ===== NAV ===== */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(6,14,31,.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1180px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 68px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: var(--font-head); font-weight: 700; font-size: 1.15rem; color: var(--white);
+    }
+    .nav-logo .logo-mark {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: linear-gradient(135deg, var(--blue-lt), var(--teal));
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem; font-weight: 900; color: #fff;
+    }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a { font-size: .88rem; font-weight: 500; color: var(--muted); transition: color .2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-badge {
+      background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+      color: #fff; font-size: .72rem; font-weight: 700;
+      letter-spacing: .06em; padding: 5px 12px; border-radius: 20px;
+    }
+    @media (max-width: 780px) { .nav-links { display: none; } }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative; overflow: hidden;
+      padding: 120px 24px 80px;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; pointer-events: none;
+    }
+    /* Grid lines */
+    .hero-bg::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(37,99,200,.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(37,99,200,.07) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    /* Radial glow */
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      top: -10%; left: 40%;
+      width: 80vw; height: 80vh;
+      background: radial-gradient(ellipse at center, rgba(37,99,200,.14) 0%, transparent 65%);
+      transform: translateX(-50%);
+    }
+    .hero-glow {
+      position: absolute; bottom: -15%; right: -10%;
+      width: 60vw; height: 60vw;
+      background: radial-gradient(ellipse at center, rgba(200,146,42,.08) 0%, transparent 60%);
+    }
+    /* Globe-like SVG overlay */
+    .hero-globe {
+      position: absolute; right: -60px; top: 50%;
+      transform: translateY(-50%);
+      width: min(620px, 50vw); opacity: .12;
+      pointer-events: none;
+    }
+    .hero-content { max-width: 1180px; margin: 0 auto; width: 100%; position: relative; z-index: 2; }
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: 12px;
+      font-size: .78rem; font-weight: 700; letter-spacing: .14em;
+      text-transform: uppercase; color: var(--gold-lt); margin-bottom: 28px;
+    }
+    .hero-eyebrow span.dot { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; }
+    .hero-eyebrow .pipe { opacity: .3; }
+    .hero-h1 {
+      font-family: var(--font-head);
+      font-size: clamp(2.6rem, 6vw, 5rem);
+      font-weight: 800; line-height: 1.06;
+      color: var(--white); margin-bottom: 8px;
+    }
+    .hero-h1 .accent {
+      background: linear-gradient(90deg, #4a9de8, #c8922a);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      color: var(--muted); max-width: 560px; margin: 20px 0 44px;
+      line-height: 1.7;
+    }
+    .hero-cta {
+      display: flex; flex-wrap: wrap; gap: 14px;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 28px; border-radius: 50px;
+      font-weight: 600; font-size: .92rem;
+      transition: all .22s ease; cursor: pointer; border: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue-lt), var(--teal));
+      color: #fff; box-shadow: 0 4px 20px rgba(37,99,200,.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,99,200,.5); color: #fff; }
+    .btn-outline {
+      background: transparent; color: var(--white);
+      border: 1px solid rgba(255,255,255,.2);
+    }
+    .btn-outline:hover { border-color: var(--white); transform: translateY(-2px); color: var(--white); }
+    .hero-stats {
+      display: flex; flex-wrap: wrap; gap: 32px;
+      margin-top: 64px; padding-top: 44px;
+      border-top: 1px solid var(--border);
+    }
+    .hero-stat { }
+    .hero-stat .num {
+      font-family: var(--font-head); font-size: 2.2rem; font-weight: 800;
+      color: var(--white); line-height: 1;
+    }
+    .hero-stat .num span { color: var(--gold-lt); }
+    .hero-stat .desc { font-size: .8rem; color: var(--muted); margin-top: 4px; max-width: 120px; }
+
+    /* ===== RFI BANNER ===== */
+    .rfi-banner {
+      background: linear-gradient(90deg, rgba(10,25,50,.95), rgba(6,14,31,.98));
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      padding: 20px 24px;
+    }
+    .rfi-inner {
+      max-width: 1180px; margin: 0 auto;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 24px;
+    }
+    .rfi-tag {
+      background: var(--blue); color: #fff;
+      font-size: .7rem; font-weight: 700; letter-spacing: .1em;
+      padding: 4px 10px; border-radius: 4px; text-transform: uppercase;
+    }
+    .rfi-item { display: flex; flex-direction: column; gap: 2px; }
+    .rfi-item .key { font-size: .68rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; }
+    .rfi-item .val { font-size: .88rem; font-weight: 600; color: var(--white); }
+    .rfi-divider { width: 1px; height: 36px; background: var(--border); flex-shrink: 0; }
+
+    /* ===== OVERVIEW ===== */
+    .overview-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start;
+    }
+    @media (max-width: 800px) { .overview-grid { grid-template-columns: 1fr; } }
+    .cert-list { display: flex; flex-direction: column; gap: 14px; margin-top: 32px; }
+    .cert-item {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 18px; background: rgba(37,99,200,.07);
+      border: 1px solid rgba(37,99,200,.15); border-radius: var(--radius);
+    }
+    .cert-icon {
+      width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+    .cert-icon-gold { background: rgba(200,146,42,.15); }
+    .cert-icon-blue { background: rgba(37,99,200,.2); }
+    .cert-item .c-name { font-size: .9rem; font-weight: 600; color: var(--white); }
+    .cert-item .c-desc { font-size: .78rem; color: var(--muted); }
+
+    .company-block { }
+    .company-block p { color: var(--muted); margin-bottom: 16px; }
+    .company-block strong { color: var(--white); }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; }
+    .info-cell {
+      padding: 14px 16px; background: rgba(12,26,48,.7);
+      border: 1px solid var(--border); border-radius: var(--radius);
+    }
+    .info-cell .ik { font-size: .68rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+    .info-cell .iv { font-size: .9rem; font-weight: 600; color: var(--white); }
+
+    /* ===== SERVICES ===== */
+    .service-card {
+      padding: 40px 36px;
+      position: relative; overflow: hidden;
+    }
+    .service-num {
+      position: absolute; top: 24px; right: 28px;
+      font-family: var(--font-head); font-size: 4rem; font-weight: 900;
+      color: rgba(255,255,255,.04); line-height: 1; user-select: none;
+    }
+    .service-icon {
+      width: 56px; height: 56px; border-radius: 14px; margin-bottom: 24px;
+      display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
+    }
+    .icon-gold { background: linear-gradient(135deg, rgba(200,146,42,.2), rgba(232,176,74,.1)); border: 1px solid rgba(200,146,42,.3); }
+    .icon-blue { background: linear-gradient(135deg, rgba(37,99,200,.25), rgba(30,143,168,.15)); border: 1px solid rgba(37,99,200,.3); }
+    .icon-teal { background: linear-gradient(135deg, rgba(30,143,168,.25), rgba(37,99,200,.15)); border: 1px solid rgba(30,143,168,.3); }
+    .service-card h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; }
+    .service-card p { font-size: .92rem; color: var(--muted); margin-bottom: 24px; }
+    .service-card .sow-ref {
+      display: inline-block; font-size: .68rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--gold-lt); background: rgba(200,146,42,.1);
+      border: 1px solid rgba(200,146,42,.25); padding: 3px 10px; border-radius: 4px;
+      margin-bottom: 20px;
+    }
+    .capability-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .capability-list li {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: .88rem; color: var(--text);
+    }
+    .capability-list li::before {
+      content: '▸'; color: var(--gold); flex-shrink: 0; margin-top: 1px;
+    }
+    .service-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    .tag {
+      font-size: .72rem; font-weight: 600; letter-spacing: .05em;
+      padding: 4px 10px; border-radius: 20px;
+    }
+    .tag-blue { background: rgba(37,99,200,.18); color: #7ab4f5; border: 1px solid rgba(37,99,200,.25); }
+    .tag-gold { background: rgba(200,146,42,.15); color: var(--gold-lt); border: 1px solid rgba(200,146,42,.2); }
+    .tag-teal { background: rgba(30,143,168,.18); color: #6ddaf0; border: 1px solid rgba(30,143,168,.25); }
+
+    /* ===== DASHBOARD MOCKUP ===== */
+    .dashboard-wrap {
+      background: linear-gradient(135deg, #080f1c, #0c1825);
+      border: 1px solid var(--border); border-radius: var(--radius-lg);
+      overflow: hidden; box-shadow: 0 24px 64px rgba(0,0,0,.5);
+    }
+    .dash-toolbar {
+      display: flex; align-items: center; gap: 12px; padding: 14px 20px;
+      background: rgba(0,0,0,.3); border-bottom: 1px solid var(--border);
+    }
+    .dot-r { width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; }
+    .dot-y { width: 12px; height: 12px; border-radius: 50%; background: #ffbd2e; }
+    .dot-g { width: 12px; height: 12px; border-radius: 50%; background: #28ca41; }
+    .dash-title-bar { flex: 1; text-align: center; font-size: .8rem; color: var(--muted); }
+    .dash-body { padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+    .dash-row { display: flex; gap: 16px; }
+    .kpi-card {
+      flex: 1; background: rgba(255,255,255,.04); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px;
+    }
+    .kpi-label { font-size: .7rem; color: var(--muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: .08em; }
+    .kpi-value { font-family: var(--font-head); font-size: 1.8rem; font-weight: 800; color: var(--white); line-height: 1; }
+    .kpi-delta { font-size: .75rem; color: #4ade80; margin-top: 4px; }
+    .kpi-delta.neg { color: #f87171; }
+    .kpi-delta.neu { color: var(--gold-lt); }
+    .chart-card {
+      background: rgba(255,255,255,.04); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px;
+    }
+    .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .chart-header h4 { font-size: .9rem; font-weight: 600; color: var(--white); }
+    .chart-header .ch-badge {
+      font-size: .68rem; color: var(--muted); background: rgba(255,255,255,.06);
+      padding: 3px 8px; border-radius: 4px;
+    }
+    /* Bar chart */
+    .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 100px; }
+    .bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+    .bar {
+      width: 100%; border-radius: 4px 4px 0 0;
+      background: linear-gradient(180deg, var(--blue-lt), var(--teal));
+      transition: height .6s ease;
+    }
+    .bar.gold { background: linear-gradient(180deg, var(--gold-lt), var(--gold-dim)); }
+    .bar-lbl { font-size: .6rem; color: var(--muted); text-align: center; }
+    /* Line chart mockup */
+    .line-chart { position: relative; height: 90px; }
+    .line-chart svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    /* Map mockup */
+    .map-mockup {
+      background: radial-gradient(ellipse at 40% 50%, rgba(26,75,140,.25) 0%, rgba(6,14,31,.8) 70%);
+      border-radius: var(--radius); height: 160px; position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .map-point {
+      position: absolute; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--gold-lt); box-shadow: 0 0 12px var(--gold);
+    }
+    .map-ring {
+      position: absolute; border: 1px solid rgba(232,176,74,.4);
+      border-radius: 50%; animation: pulse-ring 2s ease-out infinite;
+    }
+    @keyframes pulse-ring { 0% { transform: scale(.8); opacity: 1; } 100% { transform: scale(2.2); opacity: 0; } }
+    .map-label { font-size: .7rem; color: var(--gold-lt); font-weight: 600; position: relative; z-index: 2; }
+    /* Gauge */
+    .gauge-row { display: flex; gap: 16px; flex-wrap: wrap; }
+    .gauge { flex: 1; min-width: 100px; }
+    .gauge-label { font-size: .72rem; color: var(--muted); margin-bottom: 8px; }
+    .gauge-bar { background: rgba(255,255,255,.07); border-radius: 4px; height: 6px; overflow: hidden; }
+    .gauge-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--blue-lt), var(--teal)); }
+    .gauge-fill.gold { background: linear-gradient(90deg, var(--gold-dim), var(--gold-lt)); }
+    .gauge-pct { font-size: .8rem; font-weight: 700; color: var(--white); margin-top: 5px; }
+
+    /* ===== METRICS ===== */
+    .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+    @media (max-width: 900px) { .metrics-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 500px) { .metrics-grid { grid-template-columns: 1fr; } }
+    .metric-card {
+      text-align: center; padding: 36px 24px;
+    }
+    .metric-num {
+      font-family: var(--font-head); font-size: 2.6rem; font-weight: 800;
+      line-height: 1; margin-bottom: 8px;
+    }
+    .metric-num .unit { font-size: 1.5rem; font-weight: 600; }
+    .c-blue { color: #4a9de8; }
+    .c-gold { color: var(--gold-lt); }
+    .c-teal { color: #6ddaf0; }
+    .c-green { color: #4ade80; }
+    .metric-label { font-size: .82rem; color: var(--muted); line-height: 1.4; }
+
+    /* ===== ROLES ===== */
+    .roles-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+    @media (max-width: 900px) { .roles-grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 580px) { .roles-grid { grid-template-columns: 1fr; } }
+    .role-card { padding: 28px; }
+    .role-track {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: .68rem; font-weight: 700; letter-spacing: .1em;
+      text-transform: uppercase; padding: 3px 10px; border-radius: 4px; margin-bottom: 14px;
+    }
+    .track-gold { background: rgba(200,146,42,.12); color: var(--gold-lt); border: 1px solid rgba(200,146,42,.2); }
+    .track-blue { background: rgba(37,99,200,.15); color: #7ab4f5; border: 1px solid rgba(37,99,200,.25); }
+    .track-teal { background: rgba(30,143,168,.15); color: #6ddaf0; border: 1px solid rgba(30,143,168,.25); }
+    .role-card h4 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .role-card p { font-size: .83rem; color: var(--muted); margin-bottom: 16px; }
+    .role-reqs { display: flex; flex-direction: column; gap: 6px; }
+    .role-req {
+      display: flex; align-items: flex-start; gap: 8px; font-size: .8rem; color: var(--text);
+    }
+    .role-req::before { content: '✓'; color: #4ade80; font-weight: 700; flex-shrink: 0; }
+
+    /* ===== PAST PERFORMANCE ===== */
+    .perf-card {
+      display: flex; flex-direction: column; gap: 20px; padding: 36px;
+    }
+    .perf-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+    .perf-header h3 { font-size: 1.15rem; font-weight: 700; }
+    .perf-value {
+      font-family: var(--font-head); font-size: 1.3rem; font-weight: 800;
+      color: var(--gold-lt); white-space: nowrap;
+    }
+    .perf-meta { display: flex; flex-wrap: wrap; gap: 12px; }
+    .perf-tag {
+      font-size: .75rem; padding: 4px 10px; border-radius: 4px;
+      background: rgba(255,255,255,.06); color: var(--muted);
+    }
+    .perf-tag strong { color: var(--white); }
+    .perf-bullets { display: flex; flex-direction: column; gap: 8px; }
+    .perf-bullet {
+      display: flex; align-items: flex-start; gap: 10px; font-size: .88rem; color: var(--text);
+    }
+    .perf-bullet::before { content: '→'; color: var(--blue-lt); flex-shrink: 0; font-weight: 700; }
+    .cpars-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: .72rem; font-weight: 700; padding: 4px 12px; border-radius: 20px;
+      background: rgba(74,222,128,.12); color: #4ade80; border: 1px solid rgba(74,222,128,.2);
+    }
+
+    /* ===== SECURITY ===== */
+    .security-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+    @media (max-width: 800px) { .security-grid { grid-template-columns: 1fr; } }
+    .clearance-badge {
+      background: linear-gradient(135deg, rgba(10,20,40,.95), rgba(15,30,60,.9));
+      border: 1px solid rgba(200,146,42,.35); border-radius: var(--radius-lg);
+      padding: 40px; text-align: center;
+      box-shadow: 0 0 40px rgba(200,146,42,.1), inset 0 0 40px rgba(200,146,42,.03);
+    }
+    .clearance-badge .cl-icon {
+      font-size: 3.5rem; margin-bottom: 16px; display: block;
+    }
+    .clearance-badge h3 { font-size: 1.5rem; margin-bottom: 6px; }
+    .clearance-badge p { font-size: .9rem; color: var(--muted); }
+    .ts-pill {
+      display: inline-block; margin-top: 16px;
+      background: linear-gradient(90deg, #8b0000, #c00000);
+      color: #fff; font-size: .8rem; font-weight: 800;
+      letter-spacing: .12em; padding: 6px 20px; border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .sec-list { display: flex; flex-direction: column; gap: 16px; }
+    .sec-item {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 18px; background: rgba(37,99,200,.06);
+      border: 1px solid rgba(37,99,200,.12); border-radius: var(--radius);
+    }
+    .sec-num {
+      width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+      background: rgba(37,99,200,.2); color: #7ab4f5;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .78rem; font-weight: 800;
+    }
+    .sec-item h4 { font-size: .92rem; font-weight: 700; margin-bottom: 4px; }
+    .sec-item p { font-size: .82rem; color: var(--muted); }
+
+    /* ===== DIVIDER ===== */
+    .divider { height: 1px; background: var(--border); margin: 0; }
+
+    /* ===== CONTACT / CTA ===== */
+    .cta-section {
+      background: linear-gradient(135deg, var(--navy-mid), var(--navy-card));
+      border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    }
+    .cta-inner { text-align: center; max-width: 640px; margin: 0 auto; }
+    .cta-inner h2 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin-bottom: 16px; }
+    .cta-inner p { color: var(--muted); margin-bottom: 40px; }
+    .contact-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px; max-width: 780px; margin-left: auto; margin-right: auto; }
+    @media (max-width: 700px) { .contact-cards { grid-template-columns: 1fr; } }
+    .contact-card {
+      padding: 24px; text-align: left;
+      background: rgba(255,255,255,.04); border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .contact-card .cc-icon { font-size: 1.4rem; margin-bottom: 10px; }
+    .contact-card .cc-label { font-size: .68rem; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 4px; }
+    .contact-card .cc-value { font-size: .9rem; font-weight: 600; color: var(--white); }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 32px 24px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-inner {
+      max-width: 1180px; margin: 0 auto;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .footer-inner p { font-size: .8rem; color: var(--muted); }
+    .footer-disclaimer {
+      font-size: .73rem; color: rgba(100,130,170,.5);
+      max-width: 700px; line-height: 1.5; margin-top: 16px;
+    }
+    .footer-logo { display: flex; align-items: center; gap: 8px; }
+    .footer-logo .mark {
+      width: 28px; height: 28px; border-radius: 6px;
+      background: linear-gradient(135deg, var(--blue-lt), var(--teal));
+      display: flex; align-items: center; justify-content: center;
+      font-size: .72rem; font-weight: 900; color: #fff;
+    }
+
+    /* ===== ANIMATED COUNTER ===== */
+    .counter { display: inline; }
+
+    /* ===== FADE-IN ===== */
+    .fade-in {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .fade-in-delay-1 { transition-delay: .1s; }
+    .fade-in-delay-2 { transition-delay: .2s; }
+    .fade-in-delay-3 { transition-delay: .3s; }
+
+    /* ===== SECTION ACCENT ===== */
+    .accent-line {
+      width: 60px; height: 3px; border-radius: 2px;
+      background: linear-gradient(90deg, var(--blue-lt), var(--teal));
+      margin-bottom: 32px;
+    }
+    .accent-line-gold { background: linear-gradient(90deg, var(--gold-dim), var(--gold-lt)); }
+
+    /* ===== TIMELINE ===== */
+    .timeline { display: flex; gap: 0; }
+    .tl-item {
+      flex: 1; position: relative; padding: 0 16px;
+      border-top: 2px solid var(--border);
+    }
+    .tl-item::before {
+      content: '';
+      position: absolute; top: -7px; left: 0;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--blue-lt); border: 2px solid var(--navy);
+    }
+    .tl-item .tl-yr { font-size: .8rem; color: var(--gold-lt); font-weight: 700; margin-top: 16px; margin-bottom: 4px; }
+    .tl-item .tl-txt { font-size: .82rem; color: var(--muted); }
+
+    /* ===== SCROLL PROGRESS ===== */
+    #progress-bar {
+      position: fixed; top: 0; left: 0; height: 3px; z-index: 200;
+      background: linear-gradient(90deg, var(--blue-lt), var(--gold-lt));
+      width: 0%; transition: width .1s linear;
+    }
+  </style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">
+      <div class="logo-mark">S</div>
+      Spry Methods
+    </div>
+    <div class="nav-links">
+      <a href="#overview">Overview</a>
+      <a href="#services">Services</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#performance">Past Performance</a>
+      <a href="#security">Security</a>
+      <a href="#contact">Contact</a>
+      <span class="nav-badge">RFI1812879</span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-glow"></div>
+  <!-- Decorative globe SVG -->
+  <svg class="hero-globe" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="250" cy="250" r="220" stroke="#4a9de8" stroke-width="1"/>
+    <circle cx="250" cy="250" r="160" stroke="#4a9de8" stroke-width=".6"/>
+    <circle cx="250" cy="250" r="100" stroke="#4a9de8" stroke-width=".4"/>
+    <ellipse cx="250" cy="250" rx="220" ry="90" stroke="#4a9de8" stroke-width=".6"/>
+    <ellipse cx="250" cy="250" rx="220" ry="155" stroke="#4a9de8" stroke-width=".4"/>
+    <line x1="30" y1="250" x2="470" y2="250" stroke="#4a9de8" stroke-width=".6"/>
+    <line x1="250" y1="30" x2="250" y2="470" stroke="#4a9de8" stroke-width=".6"/>
+    <circle cx="310" cy="200" r="6" fill="#c8922a"/>
+    <circle cx="310" cy="200" r="16" stroke="#c8922a" stroke-width="1" opacity=".4"/>
+    <circle cx="180" cy="290" r="4" fill="#4a9de8"/>
+    <circle cx="180" cy="290" r="12" stroke="#4a9de8" stroke-width="1" opacity=".4"/>
+    <circle cx="380" cy="310" r="5" fill="#4a9de8"/>
+  </svg>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="dot"></span>
+      NGA PEO GEOINT Ground
+      <span class="pipe">|</span>
+      Office of the Secretary of War
+      <span class="pipe">|</span>
+      RFI1812879
+    </div>
+    <h1 class="hero-h1">
+      Integrated Mission Support<br>
+      for <span class="accent">NGA VISION</span>
+    </h1>
+    <p class="hero-sub">
+      Spry Methods delivers coordinated mission advocacy, data visualization & analytics, and UI/UX design to help NGA PEO-GG leadership communicate priorities, understand operational intelligence, and improve mission delivery.
+    </p>
+    <div class="hero-cta">
+      <a href="#services" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        Explore Our Capabilities
+      </a>
+      <a href="#performance" class="btn btn-outline">View Past Performance</a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="num"><span class="counter" data-target="25">0</span><span>+</span></div>
+        <div class="desc">Years Federal Service</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num"><span class="counter" data-target="95">0</span><span>%</span></div>
+        <div class="desc">On-Time Sprint Delivery</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num"><span class="counter" data-target="30">0</span></div>
+        <div class="desc">Day Cleared Staff Deploy</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num"><span class="counter" data-target="94">0</span><span>%</span></div>
+        <div class="desc">Offer Acceptance Rate</div>
+      </div>
+      <div class="hero-stat">
+        <div class="num"><span>$</span><span class="counter" data-target="34">0</span><span>M</span></div>
+        <div class="desc">Funds Tracked via Dashboard</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RFI BANNER -->
+<div class="rfi-banner">
+  <div class="rfi-inner">
+    <span class="rfi-tag">RFI</span>
+    <div class="rfi-item">
+      <span class="key">Request ID</span>
+      <span class="val">RFI1812879</span>
+    </div>
+    <div class="rfi-divider"></div>
+    <div class="rfi-item">
+      <span class="key">Program</span>
+      <span class="val">VISION — NGA PEO-GG</span>
+    </div>
+    <div class="rfi-divider"></div>
+    <div class="rfi-item">
+      <span class="key">Contracting Vehicle</span>
+      <span class="val">GSA MAS 54151S · GS-35F-0008T</span>
+    </div>
+    <div class="rfi-divider"></div>
+    <div class="rfi-item">
+      <span class="key">Set-Aside</span>
+      <span class="val">Small Business</span>
+    </div>
+    <div class="rfi-divider"></div>
+    <div class="rfi-item">
+      <span class="key">Place of Performance</span>
+      <span class="val">Springfield, VA · NGA Denver</span>
+    </div>
+    <div class="rfi-divider"></div>
+    <div class="rfi-item">
+      <span class="key">Period</span>
+      <span class="val">1 Base + 4 Option Years</span>
+    </div>
+  </div>
+</div>
+
+<!-- OVERVIEW -->
+<section class="section" id="overview">
+  <div class="container">
+    <div class="overview-grid">
+      <div class="company-block fade-in">
+        <div class="label">Company Overview</div>
+        <h2 class="section-title">Proven Small Business.<br>Mission-Ready Today.</h2>
+        <p>Founded in 2001, <strong>Spry Methods, Inc.</strong> is a small business federal technology services provider with more than two decades of experience supporting mission-critical operations across civilian, defense, and intelligence environments.</p>
+        <p>Our integrated delivery model combines mission advocacy, analytics, and user-focused support to help federal leadership communicate priorities, understand operational data, and improve service delivery — precisely the integrated support NGA's VISION program requires.</p>
+        <div class="info-grid">
+          <div class="info-cell"><div class="ik">Address</div><div class="iv">1420 Spring Hill Rd, Ste 300<br>McLean, VA 22102</div></div>
+          <div class="info-cell"><div class="ik">Business Size</div><div class="iv">Small Business</div></div>
+          <div class="info-cell"><div class="ik">UEI Number</div><div class="iv">F4PFMHQVJ5B9</div></div>
+          <div class="info-cell"><div class="ik">CAGE Code</div><div class="iv">3HD17</div></div>
+          <div class="info-cell"><div class="ik">GSA Contract</div><div class="iv">GS-35F-0008T</div></div>
+          <div class="info-cell"><div class="ik">SIN</div><div class="iv">54151S</div></div>
+        </div>
+      </div>
+      <div class="fade-in fade-in-delay-2">
+        <div class="label">Operational Readiness</div>
+        <h3 style="font-size:1.3rem; margin-bottom: 6px; margin-top: -4px;">Compliance &amp; Certifications</h3>
+        <p style="color:var(--muted); font-size:.9rem; margin-bottom: 24px;">Spry provides a low-risk, immediately deployable capability aligned to federal security and quality standards.</p>
+        <div class="cert-list">
+          <div class="cert-item">
+            <div class="cert-icon cert-icon-gold">🔒</div>
+            <div><div class="c-name">Top Secret Facility Clearance (FCL)</div><div class="c-desc">Enables immediate performance in classified environments</div></div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-icon cert-icon-blue">💼</div>
+            <div><div class="c-name">DCAA-Approved Accounting System</div><div class="c-desc">Supports cost-reimbursable and T&amp;M contract execution</div></div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-icon cert-icon-gold">🛡️</div>
+            <div><div class="c-name">ISO/IEC 27001 · ISO 9001 · ISO/IEC 20000-1</div><div class="c-desc">Disciplined service management, quality control, information security</div></div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-icon cert-icon-blue">⚙️</div>
+            <div><div class="c-name">CMMI-SVC Maturity Level 3</div><div class="c-desc">Repeatable, process-driven service delivery</div></div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-icon cert-icon-gold">📋</div>
+            <div><div class="c-name">OCI Mitigation Plan</div><div class="c-desc">VISION-specific conflict of interest strategy per FAR 9.505</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="container">
+    <div class="label fade-in">Core Service Areas</div>
+    <h2 class="section-title fade-in">Three Pillars of Integrated<br>Mission Support</h2>
+    <p class="section-sub fade-in">Aligned directly to the VISION SOW (Version 3) scope, Spry delivers coordinated support across all three required disciplines — as an integrated capability, not isolated labor categories.</p>
+    <div class="grid-3">
+
+      <!-- Pillar 1 -->
+      <div class="card card-gold service-card fade-in">
+        <div class="service-num">01</div>
+        <div class="service-icon icon-gold">📢</div>
+        <span class="sow-ref">SOW §3.1 / X001</span>
+        <h3>Mission Advocacy &amp; Strategic Communications</h3>
+        <p>Executive mission-enablement — translating complex GEOINT priorities into clear, compelling narratives for NGA leadership, Congressional stakeholders, and the Intelligence Community.</p>
+        <ul class="capability-list">
+          <li>Executive briefings, talking points &amp; correspondence for ADC, OCIO, OCDO</li>
+          <li>High-impact infographics &amp; visual communications for senior decision-makers</li>
+          <li>Cross-functional SME coordination to produce accurate narrative &amp; visual products</li>
+          <li>Strategic engagement planning &amp; operational effectiveness support</li>
+          <li>Error-free, audience-tailored products aligned to IC publication policies</li>
+        </ul>
+        <div class="service-tags">
+          <span class="tag tag-gold">Briefings</span>
+          <span class="tag tag-gold">Infographics</span>
+          <span class="tag tag-gold">Stakeholder Comms</span>
+          <span class="tag tag-gold">Strategic Planning</span>
+        </div>
+      </div>
+
+      <!-- Pillar 2 -->
+      <div class="card service-card fade-in fade-in-delay-1">
+        <div class="service-num">02</div>
+        <div class="service-icon icon-blue">📊</div>
+        <span class="sow-ref">SOW §3.2 / X001</span>
+        <h3>Data Visualization &amp; Analytics</h3>
+        <p>Bridging raw GEOINT data and strategic insight — building interactive dashboards, reports, and visual narratives that make complex information actionable for both technical and executive audiences.</p>
+        <ul class="capability-list">
+          <li>End-to-end dashboard &amp; report development in Tableau and Power BI</li>
+          <li>Data collection, cleaning &amp; structuring for accuracy &amp; integrity</li>
+          <li>KPI definition, alignment &amp; self-service analytics infrastructure</li>
+          <li>Statistical trend analysis, pattern detection &amp; insight generation</li>
+          <li>Visual storytelling: charts, graphs, maps &amp; interactive analytics</li>
+        </ul>
+        <div class="service-tags">
+          <span class="tag tag-blue">Power BI</span>
+          <span class="tag tag-blue">Tableau</span>
+          <span class="tag tag-blue">SQL</span>
+          <span class="tag tag-blue">KPI Dashboards</span>
+          <span class="tag tag-blue">Data Science</span>
+        </div>
+      </div>
+
+      <!-- Pillar 3 -->
+      <div class="card service-card fade-in fade-in-delay-2">
+        <div class="service-num">03</div>
+        <div class="service-icon icon-teal">🎨</div>
+        <span class="sow-ref">SOW §3.3 / X001</span>
+        <h3>UI/UX Design</h3>
+        <p>Human-centered design improving usability, adoption, and consistency across NGA PEO-GG digital products — from initial research through final implementation in secure federal environments.</p>
+        <ul class="capability-list">
+          <li>User research, persona development &amp; usability testing</li>
+          <li>Wireframes, interaction flows, storyboards &amp; sitemaps</li>
+          <li>High-fidelity mockups &amp; interactive prototypes (Figma, Adobe XD)</li>
+          <li>Design system creation, maintenance &amp; final UI review</li>
+          <li>Engineering collaboration for design feasibility &amp; seamless implementation</li>
+        </ul>
+        <div class="service-tags">
+          <span class="tag tag-teal">Figma</span>
+          <span class="tag tag-teal">Adobe XD</span>
+          <span class="tag tag-teal">Prototyping</span>
+          <span class="tag tag-teal">User Research</span>
+          <span class="tag tag-teal">Design Systems</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DASHBOARD MOCKUP -->
+<section class="section-sm" id="capabilities">
+  <div class="container">
+    <div class="label fade-in">Interactive Analytics Preview</div>
+    <h2 class="section-title fade-in">What Your Dashboards<br>Could Look Like</h2>
+    <p class="section-sub fade-in">A sample of the kind of decision-ready analytics and visualization capability Spry delivers for federal program leadership.</p>
+    <div class="dashboard-wrap fade-in">
+      <div class="dash-toolbar">
+        <div class="dot-r"></div><div class="dot-y"></div><div class="dot-g"></div>
+        <div class="dash-title-bar">NGA PEO-GG · VISION Program Analytics · DEMO</div>
+      </div>
+      <div class="dash-body">
+        <!-- KPIs -->
+        <div class="dash-row">
+          <div class="kpi-card">
+            <div class="kpi-label">Mission Briefs Delivered</div>
+            <div class="kpi-value" id="kpi1">247</div>
+            <div class="kpi-delta">↑ 18% this quarter</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Dashboard Products</div>
+            <div class="kpi-value" id="kpi2">34</div>
+            <div class="kpi-delta">↑ 6 new this cycle</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Sprint Delivery Rate</div>
+            <div class="kpi-value" id="kpi3">95%</div>
+            <div class="kpi-delta">15+ concurrent efforts</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Staff Onboarding</div>
+            <div class="kpi-value" id="kpi4">17d</div>
+            <div class="kpi-delta neu">Avg. days to deploy</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Clearance Attrition</div>
+            <div class="kpi-value" id="kpi5">3.95%</div>
+            <div class="kpi-delta neg">↓ Best-in-class</div>
+          </div>
+        </div>
+        <!-- Charts row -->
+        <div class="dash-row" style="flex-wrap:wrap; gap:16px;">
+          <div class="chart-card" style="flex:2; min-width:260px;">
+            <div class="chart-header">
+              <h4>GEOINT Collection Throughput</h4>
+              <span class="ch-badge">Q1–Q4 FY26</span>
+            </div>
+            <div class="bar-chart">
+              <div class="bar-wrap"><div class="bar" style="height:55px"></div><div class="bar-lbl">Q1</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:72px"></div><div class="bar-lbl">Q2</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:64px"></div><div class="bar-lbl">Q3</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:90px"></div><div class="bar-lbl">Q4</div></div>
+              <div class="bar-wrap"><div class="bar gold" style="height:42px"></div><div class="bar-lbl">Target</div></div>
+            </div>
+          </div>
+          <div class="chart-card" style="flex:1.4; min-width:220px;">
+            <div class="chart-header">
+              <h4>Stakeholder Engagement Score</h4>
+              <span class="ch-badge">30-day rolling</span>
+            </div>
+            <div class="line-chart">
+              <svg viewBox="0 0 200 80" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="lg1" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#2563c8" stop-opacity=".4"/>
+                    <stop offset="100%" stop-color="#2563c8" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M0,60 C20,55 40,35 60,40 C80,45 100,20 120,25 C140,30 160,15 180,10 L180,80 L0,80 Z" fill="url(#lg1)"/>
+                <path d="M0,60 C20,55 40,35 60,40 C80,45 100,20 120,25 C140,30 160,15 180,10" fill="none" stroke="#4a9de8" stroke-width="2"/>
+                <path d="M0,65 C20,62 40,50 60,52 C80,54 100,40 120,38 C140,36 160,30 180,22" fill="none" stroke="#c8922a" stroke-width="1.5" stroke-dasharray="4 3" opacity=".7"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <!-- Map + gauges row -->
+        <div class="dash-row" style="flex-wrap:wrap;">
+          <div class="chart-card" style="flex:1.5; min-width:240px;">
+            <div class="chart-header">
+              <h4>Place of Performance</h4>
+              <span class="ch-badge">Active Sites</span>
+            </div>
+            <div class="map-mockup">
+              <div class="map-point" style="top:40%; left:38%;"></div>
+              <div class="map-ring" style="top:calc(40% - 12px); left:calc(38% - 12px); width:24px; height:24px; animation-delay:0s;"></div>
+              <div class="map-ring" style="top:calc(40% - 20px); left:calc(38% - 20px); width:40px; height:40px; animation-delay:.4s;"></div>
+              <div class="map-point" style="top:38%; left:20%; background:#4a9de8; box-shadow:0 0 12px #4a9de8;"></div>
+              <div class="map-ring" style="top:calc(38% - 12px); left:calc(20% - 12px); width:24px; height:24px; border-color:rgba(74,157,232,.4); animation-delay:.8s;"></div>
+              <span style="position:absolute; bottom:12px; left:50%; transform:translateX(-50%); font-size:.7rem; color:var(--muted);">
+                <span style="color:var(--gold-lt);">●</span> Springfield, VA &nbsp;&nbsp;
+                <span style="color:#4a9de8;">●</span> NGA Denver, CO
+              </span>
+            </div>
+          </div>
+          <div class="chart-card" style="flex:2; min-width:260px;">
+            <div class="chart-header">
+              <h4>Workforce Readiness Metrics</h4>
+              <span class="ch-badge">Current</span>
+            </div>
+            <div class="gauge-row">
+              <div class="gauge">
+                <div class="gauge-label">Offer Acceptance</div>
+                <div class="gauge-bar"><div class="gauge-fill" style="width:94%;"></div></div>
+                <div class="gauge-pct">94%</div>
+              </div>
+              <div class="gauge">
+                <div class="gauge-label">Retention Rate</div>
+                <div class="gauge-bar"><div class="gauge-fill" style="width:96%;"></div></div>
+                <div class="gauge-pct">96%</div>
+              </div>
+              <div class="gauge">
+                <div class="gauge-label">Cleared Staff Ready</div>
+                <div class="gauge-bar"><div class="gauge-fill gold" style="width:100%;"></div></div>
+                <div class="gauge-pct">30-day Deploy</div>
+              </div>
+              <div class="gauge">
+                <div class="gauge-label">Sprint On-Time</div>
+                <div class="gauge-bar"><div class="gauge-fill" style="width:95%;"></div></div>
+                <div class="gauge-pct">~95%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- KEY METRICS -->
+<section class="section-sm" style="background: linear-gradient(180deg, var(--navy-mid) 0%, var(--navy) 100%);">
+  <div class="container">
+    <div class="label fade-in" style="justify-content:center; text-align:center;">Proven Results</div>
+    <h2 class="section-title fade-in" style="text-align:center; margin-left:auto; margin-right:auto;">Measurable Impact Across<br>Federal Environments</h2>
+    <div class="metrics-grid" style="margin-top:48px;">
+      <div class="card metric-card fade-in">
+        <div class="metric-num c-blue"><span class="counter" data-target="44">0</span><span class="unit">%</span></div>
+        <div class="metric-label">Increase in user proficiency — USDA IAS system support</div>
+      </div>
+      <div class="card metric-card fade-in fade-in-delay-1">
+        <div class="metric-num c-gold">$<span class="counter" data-target="34">0</span><span class="unit">M</span></div>
+        <div class="metric-label">Funds tracked &amp; reallocated via ROOT reporting dashboard</div>
+      </div>
+      <div class="card metric-card fade-in fade-in-delay-2">
+        <div class="metric-num c-teal"><span class="counter" data-target="63">0</span><span class="unit">%</span></div>
+        <div class="metric-label">Reduction in RMF timelines in an NGA environment</div>
+      </div>
+      <div class="card metric-card fade-in fade-in-delay-3">
+        <div class="metric-num c-green">$<span class="counter" data-target="4">0</span><span class="unit">M</span></div>
+        <div class="metric-label">Annual savings generated through NGA RMF improvements</div>
+      </div>
+      <div class="card metric-card fade-in">
+        <div class="metric-num c-blue"><span class="counter" data-target="32">0</span><span class="unit">K+</span></div>
+        <div class="metric-label">Labor hours saved annually in NGA security operations</div>
+      </div>
+      <div class="card metric-card fade-in fade-in-delay-1">
+        <div class="metric-num c-gold"><span class="counter" data-target="100">0</span><span class="unit">%</span></div>
+        <div class="metric-label">System uptime across 42 production servers — USDA IAS</div>
+      </div>
+      <div class="card metric-card fade-in fade-in-delay-2">
+        <div class="metric-num c-teal"><span class="counter" data-target="98">0</span><span class="unit">%</span></div>
+        <div class="metric-label">Help desk tickets resolved within one week</div>
+      </div>
+      <div class="card metric-card fade-in fade-in-delay-3">
+        <div class="metric-num c-green"><span class="counter" data-target="20">0</span><span class="unit">+</span></div>
+        <div class="metric-label">Production releases annually across concurrent sprint efforts</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ROLES / STAFFING -->
+<section class="section" id="roles">
+  <div class="container">
+    <div class="label fade-in">Staffing Plan</div>
+    <h2 class="section-title fade-in">SOW-Aligned Role Coverage</h2>
+    <p class="section-sub fade-in">Spry fields qualified personnel across all required labor categories defined in the VISION SOW — ready to deploy within 30 days with active clearances.</p>
+    <div class="roles-grid">
+      <div class="card role-card fade-in">
+        <span class="role-track track-gold">Mission Advocacy</span>
+        <h4>Expert Mission Advocate</h4>
+        <p>Advises ADC, OCIO, OCDO senior leadership; creates and refines agency-level communications products.</p>
+        <div class="role-reqs">
+          <div class="role-req">IC/DoW Mission IT communication experience</div>
+          <div class="role-req">Strategic engagement &amp; communication planning</div>
+          <div class="role-req">Executive briefings &amp; official correspondence</div>
+          <div class="role-req">IC publication policy compliance</div>
+        </div>
+      </div>
+      <div class="card role-card fade-in fade-in-delay-1">
+        <span class="role-track track-gold">Mission Advocacy</span>
+        <h4>Senior Mission Advocate <span style="font-size:.75rem; color:var(--muted);">(×2, +1 Optional)</span></h4>
+        <p>Executes PEO-GG strategic communications; drafts, edits, and prepares products for complex mission topics.</p>
+        <div class="role-reqs">
+          <div class="role-req">IC/DoD visualization &amp; communications</div>
+          <div class="role-req">Strategic communication plan development</div>
+          <div class="role-req">Executive-level graphical content design</div>
+          <div class="role-req">UI/UX collaboration for design consistency</div>
+        </div>
+      </div>
+      <div class="card role-card fade-in fade-in-delay-2">
+        <span class="role-track track-gold">Mission Advocacy</span>
+        <h4>Mid-Level / Junior Advocates</h4>
+        <p>Supports the Mission Advocacy Team with briefings, talking points, graphical content, and SME coordination.</p>
+        <div class="role-reqs">
+          <div class="role-req">Complex IC capability communication</div>
+          <div class="role-req">Talking points &amp; briefing preparation</div>
+          <div class="role-req">Error-free execution in fast-paced environment</div>
+          <div class="role-req">Bachelor's degree or equivalent experience</div>
+        </div>
+      </div>
+      <div class="card role-card fade-in">
+        <span class="role-track track-teal">UI/UX Design</span>
+        <h4>Expert/Senior UI/UX Designer <span style="font-size:.75rem; color:var(--muted);">(×2, +1 Optional)</span></h4>
+        <p>End-to-end design from user research through implementation; maintains design systems across PEO-GG products.</p>
+        <div class="role-reqs">
+          <div class="role-req">Figma · Sketch · Adobe Creative Suite</div>
+          <div class="role-req">User research, wireframing &amp; prototyping</div>
+          <div class="role-req">Engineering collaboration for feasibility</div>
+          <div class="role-req">HCI / Graphic Design / CS degree or 5 yr exp</div>
+        </div>
+      </div>
+      <div class="card role-card fade-in fade-in-delay-1">
+        <span class="role-track track-blue">Data Analytics</span>
+        <h4>Expert Data Visualization Specialist</h4>
+        <p>Transforms complex datasets into intuitive, actionable analytics products aligned to strategic objectives.</p>
+        <div class="role-reqs">
+          <div class="role-req">Tableau · Power BI — expert proficiency</div>
+          <div class="role-req">SQL querying &amp; data preparation</div>
+          <div class="role-req">Statistical trend analysis &amp; KPI definition</div>
+          <div class="role-req">Data Science / CS / Statistics degree</div>
+        </div>
+      </div>
+      <div class="card role-card fade-in fade-in-delay-2">
+        <span class="role-track track-blue">Data Analytics</span>
+        <h4>Senior &amp; Mid-Level Analytics <span style="font-size:.75rem; color:var(--muted);">(×3)</span></h4>
+        <p>Develops dashboards, maintains BI tools, performs data structuring, and supports stakeholder requirements analysis.</p>
+        <div class="role-reqs">
+          <div class="role-req">Interactive dashboard &amp; report development</div>
+          <div class="role-req">Data cleaning &amp; transformation</div>
+          <div class="role-req">Stakeholder collaboration &amp; requirements</div>
+          <div class="role-req">Visual storytelling for non-technical audiences</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PAST PERFORMANCE -->
+<section class="section" id="performance">
+  <div class="container">
+    <div class="label fade-in">Past Performance</div>
+    <h2 class="section-title fade-in">Three Contracts.<br>Directly Relevant Experience.</h2>
+    <p class="section-sub fade-in">Spry's past performance demonstrates proven execution in the exact capabilities NGA's VISION program requires — in secure mission environments, enterprise federal platforms, and regulated compliance settings.</p>
+    <div class="grid-3" style="gap:24px;">
+
+      <div class="card perf-card fade-in">
+        <div class="perf-header">
+          <div>
+            <div style="font-size:.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px;">Contract 01</div>
+            <h3>NIWC Atlantic — E2S2</h3>
+            <p style="font-size:.82rem; color:var(--muted); margin-top:4px;">Naval Information Warfare Center Atlantic · Expeditionary Enterprise Systems &amp; Services</p>
+          </div>
+          <div class="perf-value">$19.6M</div>
+        </div>
+        <div class="perf-meta">
+          <div class="perf-tag"><strong>N65236-23-F-3012</strong></div>
+          <div class="perf-tag">03/2023 – 03/2028</div>
+          <div class="perf-tag">Defense / Classified</div>
+          <span class="cpars-badge">CPARS Available</span>
+        </div>
+        <div class="perf-bullets">
+          <div class="perf-bullet">Secure, mission-critical defense environment — classified operations &amp; enterprise services delivery</div>
+          <div class="perf-bullet">Disciplined cross-functional coordination across stakeholders and technical teams</div>
+          <div class="perf-bullet">~95% on-time sprint delivery across 15+ concurrent efforts</div>
+          <div class="perf-bullet">Demonstrates ability to deploy cleared staff within 30 days; 17-day onboarding</div>
+        </div>
+        <div class="service-tags">
+          <span class="tag tag-blue">Cleared Workforce</span>
+          <span class="tag tag-blue">Mission-Critical Ops</span>
+          <span class="tag tag-blue">Agile Delivery</span>
+        </div>
+      </div>
+
+      <div class="card perf-card fade-in fade-in-delay-1">
+        <div class="perf-header">
+          <div>
+            <div style="font-size:.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px;">Contract 02</div>
+            <h3>USDA Integrated Acquisition System (IAS)</h3>
+            <p style="font-size:.82rem; color:var(--muted); margin-top:4px;">U.S. Department of Agriculture · Procurement Systems Division</p>
+          </div>
+          <div class="perf-value">$10.5M</div>
+        </div>
+        <div class="perf-meta">
+          <div class="perf-tag"><strong>GS-35F-0008T</strong></div>
+          <div class="perf-tag">08/2024 – 02/2026</div>
+          <div class="perf-tag">Enterprise Platform</div>
+          <span class="cpars-badge" style="background:rgba(74,222,128,.15);">All Exceptional CPARS</span>
+        </div>
+        <div class="perf-bullets">
+          <div class="perf-bullet">~5,000 users · 10+ system interfaces · ~$6.3B annual contract obligations</div>
+          <div class="perf-bullet">ROOT dashboard: $34M in funds tracked &amp; reallocated by leadership</div>
+          <div class="perf-bullet">44% increase in user proficiency; 98% of help desk tickets resolved in one week</div>
+          <div class="perf-bullet">100% system uptime across 42 production servers; 20+ releases annually</div>
+        </div>
+        <div class="service-tags">
+          <span class="tag tag-gold">Data Dashboards</span>
+          <span class="tag tag-gold">Power BI</span>
+          <span class="tag tag-gold">UI/UX Support</span>
+          <span class="tag tag-gold">Enterprise Scale</span>
+        </div>
+      </div>
+
+      <div class="card perf-card fade-in fade-in-delay-2">
+        <div class="perf-header">
+          <div>
+            <div style="font-size:.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:6px;">Contract 03</div>
+            <h3>DOT FRA Cybersecurity &amp; Compliance</h3>
+            <p style="font-size:.82rem; color:var(--muted); margin-top:4px;">Department of Transportation · Federal Railroad Administration</p>
+          </div>
+          <div class="perf-value">$3.7M</div>
+        </div>
+        <div class="perf-meta">
+          <div class="perf-tag"><strong>75N981-20-D-0079</strong></div>
+          <div class="perf-tag">09/2024 – 07/2029</div>
+          <div class="perf-tag">Regulated / RMF</div>
+          <span class="cpars-badge">Very Good CPARS</span>
+        </div>
+        <div class="perf-bullets">
+          <div class="perf-bullet">Prime contractor for FISMA SAA — NIST SP 800-53/53A Rev. 5 assessment</div>
+          <div class="perf-bullet">Full assessments for 5 systems including 2 new; ~80 POA&amp;Ms closed in one year</div>
+          <div class="perf-bullet">Exceptional ratings in Quality, Schedule &amp; Regulatory Compliance</div>
+          <div class="perf-bullet">Disciplined governance, compliance tracking &amp; oversight in regulated federal environment</div>
+        </div>
+        <div class="service-tags">
+          <span class="tag tag-teal">FISMA / RMF</span>
+          <span class="tag tag-teal">Compliance</span>
+          <span class="tag tag-teal">Governance</span>
+          <span class="tag tag-teal">NIST 800-53</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SECURITY -->
+<section class="section" id="security">
+  <div class="container">
+    <div class="label fade-in">Security &amp; Compliance</div>
+    <h2 class="section-title fade-in">Immediately Deployable in<br>Classified Environments</h2>
+    <div class="security-grid" style="margin-top:48px;">
+      <div class="clearance-badge fade-in">
+        <span class="cl-icon">🛡️</span>
+        <h3>Top Secret Facility Clearance</h3>
+        <p>Spry holds an active TS Facility Clearance (FCL) enabling immediate performance in NGA's classified Springfield, VA and Denver environments without delay for facility sponsor actions.</p>
+        <div class="ts-pill">TOP SECRET / SCI READY</div>
+        <div style="margin-top:20px; padding-top:20px; border-top:1px solid rgba(200,146,42,.2); font-size:.83rem; color:var(--muted);">
+          Personnel cleared per SEAD 7 reciprocity requirements · DD Form 254 compliant · DCSA as Cognizant Security Authority
+        </div>
+      </div>
+      <div class="sec-list fade-in fade-in-delay-2">
+        <div class="sec-item">
+          <div class="sec-num">7.1</div>
+          <div>
+            <h4>Classified Work Performance</h4>
+            <p>Active TS clearances for all classified environment personnel; DISS-based SEAD 3 reporting; NGA mandatory training compliance; DD 254 adherence.</p>
+          </div>
+        </div>
+        <div class="sec-item">
+          <div class="sec-num">7.2</div>
+          <div>
+            <h4>Unclassified &amp; CUI Handling</h4>
+            <p>HSPD-12 / Tier 1 adjudicated personnel ready; foreign national exclusion enforced; prior written COR approval for any information release.</p>
+          </div>
+        </div>
+        <div class="sec-item">
+          <div class="sec-num">7.3</div>
+          <div>
+            <h4>Information Handling</h4>
+            <p>All materials marked per CoNGA Security Classification Guide; lowest-possible classification applied; Government-furnished information returned or destroyed per contract requirements.</p>
+          </div>
+        </div>
+        <div class="sec-item">
+          <div class="sec-num">9.0</div>
+          <div>
+            <h4>OCI Mitigation Plan</h4>
+            <p>Comprehensive VISION-specific OCI strategy addressing unequal access to information, biased ground rules, and impaired objectivity per FAR 9.505 — incorporated into contract per SOW §9.0.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SOW COMPLIANCE TABLE -->
+<section class="section-sm">
+  <div class="container">
+    <div class="label fade-in" style="justify-content:center; text-align:center;">Compliance Matrix</div>
+    <h2 class="section-title fade-in" style="text-align:center; max-width:700px; margin:0 auto 16px;">Full Alignment to VISION SOW v3</h2>
+    <p style="text-align:center; color:var(--muted); margin-bottom:48px; font-size:.95rem;">Every deliverable, role, and security requirement mapped to Spry's demonstrated capabilities.</p>
+    <div style="overflow-x:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:.88rem;">
+        <thead>
+          <tr style="border-bottom:1px solid var(--border);">
+            <th style="text-align:left; padding:12px 16px; color:var(--muted); font-weight:600; font-size:.75rem; text-transform:uppercase; letter-spacing:.08em;">SOW Ref</th>
+            <th style="text-align:left; padding:12px 16px; color:var(--muted); font-weight:600; font-size:.75rem; text-transform:uppercase; letter-spacing:.08em;">Requirement</th>
+            <th style="text-align:left; padding:12px 16px; color:var(--muted); font-weight:600; font-size:.75rem; text-transform:uppercase; letter-spacing:.08em;">Spry Capability</th>
+            <th style="text-align:center; padding:12px 16px; color:var(--muted); font-weight:600; font-size:.75rem; text-transform:uppercase; letter-spacing:.08em;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid rgba(100,150,220,.08);">
+            <td style="padding:14px 16px; color:var(--gold-lt); font-weight:700;">§3.1</td>
+            <td style="padding:14px 16px; color:var(--white);">Mission Advocacy &amp; Strategic Comms</td>
+            <td style="padding:14px 16px; color:var(--muted);">Executive briefings, infographics, stakeholder products — NIWC E2S2, USDA IAS</td>
+            <td style="padding:14px 16px; text-align:center;"><span style="color:#4ade80; font-weight:700;">✓ FULL</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(100,150,220,.08); background:rgba(255,255,255,.02);">
+            <td style="padding:14px 16px; color:var(--gold-lt); font-weight:700;">§3.2</td>
+            <td style="padding:14px 16px; color:var(--white);">Data Visualization &amp; Analytics</td>
+            <td style="padding:14px 16px; color:var(--muted);">Tableau, Power BI, SQL, ROOT dashboard — $34M tracked, USDA IAS</td>
+            <td style="padding:14px 16px; text-align:center;"><span style="color:#4ade80; font-weight:700;">✓ FULL</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(100,150,220,.08);">
+            <td style="padding:14px 16px; color:var(--gold-lt); font-weight:700;">§3.3</td>
+            <td style="padding:14px 16px; color:var(--white);">UI/UX Design</td>
+            <td style="padding:14px 16px; color:var(--muted);">Figma, Adobe XD, HCD, 44% user proficiency increase — USDA IAS</td>
+            <td style="padding:14px 16px; text-align:center;"><span style="color:#4ade80; font-weight:700;">✓ FULL</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(100,150,220,.08); background:rgba(255,255,255,.02);">
+            <td style="padding:14px 16px; color:var(--gold-lt); font-weight:700;">§4.0</td>
+            <td style="padding:14px 16px; color:var(--white);">Springfield, VA &amp; NGA Denver PoP</td>
+            <td style="padding:14px 16px; color:var(--muted);">McLean, VA HQ; cleared staff deploy within 30 days</td>
+            <td style="padding:14px 16px; text-align:center;"><span style="color:#4ade80; font-weight:700;">✓ FULL</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(100,150,220,.08);">
+            <td style="padding:14px 16px; color:var(--gold-lt); font-weight:700;">§6.1–6.4</td>
+            <td style="padding:14px 16px; color:var(--white);">Mission Advocate Roles (Expert–Junior)</td>
+            <td style="padding:14px 16px; color:var(--muted);">Qualified personnel aligned to all four levels; minimum 4-person team fielded</td>
+            <td style="padding:14px 16px; text-align:center;"><span style="color:#4ade80; font-weight:700;">✓ FULL</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(100,150,220,.08); background:rgba(255,255,255,.02);">
+            <td style="padding:14px 16px; color:var(--gold-lt); font-weight:700;">§6.5</td>
+            <td style="padding:14px 16px; color:var(--white);">Expert/Senior UI/UX Designer</td>
+            <td style="padding:14px 16px; color:var(--muted);">2 FTE + 1 optional; HCI / Design degreed; full toolchain proficiency</td>
+            <td style="padding:14px 16px; text-align:center;"><span style="color:#4ade80; font-weight:700;">✓ FULL</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(100,150,220,.08);">
+            <td style="padding:14px 16px; color:var(--gold-lt); font-weight:700;">§6.6–6.8</td>
+            <td style="padding:14px 16px; color:var(--white);">Data Analytics Specialists (Expert–Mid)</td>
+            <td style="padding:14px 16px; color:var(--muted);">Expert, Senior, and 2× Mid-level; SQL, Tableau, Power BI, data science</td>
+            <td style="padding:14px 16px; text-align:center;"><span style="color:#4ade80; font-weight:700;">✓ FULL</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(100,150,220,.08); background:rgba(255,255,255,.02);">
+            <td style="padding:14px 16px; color:var(--gold-lt); font-weight:700;">§7.0</td>
+            <td style="padding:14px 16px; color:var(--white);">TS Security Requirements</td>
+            <td style="padding:14px 16px; color:var(--muted);">Active TS FCL; DCSA CSA; SEAD 7 reciprocity; DD 254 compliant</td>
+            <td style="padding:14px 16px; text-align:center;"><span style="color:#4ade80; font-weight:700;">✓ FULL</span></td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(100,150,220,.08);">
+            <td style="padding:14px 16px; color:var(--gold-lt); font-weight:700;">§8.0</td>
+            <td style="padding:14px 16px; color:var(--white);">CDRLs (A001–A006)</td>
+            <td style="padding:14px 16px; color:var(--muted);">NDAs, Monthly Invoices, Financial Reports, Activity Reports, Telework Plan, Trip Reports</td>
+            <td style="padding:14px 16px; text-align:center;"><span style="color:#4ade80; font-weight:700;">✓ FULL</span></td>
+          </tr>
+          <tr style="background:rgba(255,255,255,.02);">
+            <td style="padding:14px 16px; color:var(--gold-lt); font-weight:700;">§9.0</td>
+            <td style="padding:14px 16px; color:var(--white);">OCI Mitigation Plan</td>
+            <td style="padding:14px 16px; color:var(--muted);">Comprehensive VISION-specific OCI strategy per FAR 9.505; all three OCI types addressed</td>
+            <td style="padding:14px 16px; text-align:center;"><span style="color:#4ade80; font-weight:700;">✓ FULL</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CTA / CONTACT -->
+<section class="cta-section section" id="contact">
+  <div class="container">
+    <div class="cta-inner fade-in">
+      <div class="label" style="justify-content:center;">Ready to Respond</div>
+      <h2>Let's Support NGA's<br>VISION Mission Together</h2>
+      <p>Spry Methods is prepared to submit a full proposal under GSA MAS 54151S (GS-35F-0008T) the moment this requirement is issued as an RFP. We're immediately deployable, fully cleared, and mission-ready.</p>
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+        <a href="mailto:contracts@sprymethods.com" class="btn btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,12 2,6"/></svg>
+          Contact Us
+        </a>
+        <a href="https://www.sprymethods.com" class="btn btn-outline" target="_blank">Visit sprymethods.com</a>
+      </div>
+    </div>
+    <div class="contact-cards fade-in">
+      <div class="contact-card">
+        <div class="cc-icon">👤</div>
+        <div class="cc-label">Point of Contact</div>
+        <div class="cc-value">Nichole Gohman</div>
+        <div style="color:var(--muted); font-size:.8rem; margin-top:4px;">(703) 600-7779</div>
+      </div>
+      <div class="contact-card">
+        <div class="cc-icon">✉️</div>
+        <div class="cc-label">Email</div>
+        <div class="cc-value">contracts@sprymethods.com</div>
+      </div>
+      <div class="contact-card">
+        <div class="cc-icon">📍</div>
+        <div class="cc-label">Headquarters</div>
+        <div class="cc-value">1420 Spring Hill Rd, Ste 300<br>McLean, VA 22102</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div class="mark">S</div>
+      <span style="font-size:.9rem; font-weight:600; color:var(--white);">Spry Methods, Inc.</span>
+    </div>
+    <p>RFI1812879 · NGA VISION · Capability Statement · June 18, 2026</p>
+    <p>GSA MAS SIN 54151S · GS-35F-0008T · CAGE 3HD17 · UEI F4PFMHQVJ5B9</p>
+  </div>
+  <div class="footer-inner" style="margin-top:16px;">
+    <p class="footer-disclaimer">
+      PROPRIETARY — This response includes data that shall not be disclosed outside the Government and shall not be duplicated, used, or disclosed—in whole or in part—for any purpose other than to evaluate this quote. This prototype is for government market research purposes only in response to GSA RFI1812879 on behalf of the Office of the Secretary of War / NGA PEO GEOINT Ground Office.
+    </p>
+  </div>
+</footer>
+
+<script>
+  // ===== SCROLL PROGRESS =====
+  const bar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.width = (window.scrollY / h * 100) + '%';
+  });
+
+  // ===== FADE IN ON SCROLL =====
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // ===== ANIMATED COUNTERS =====
+  function animateCounter(el) {
+    const target = parseInt(el.dataset.target);
+    const duration = 1600;
+    const step = target / (duration / 16);
+    let current = 0;
+    const timer = setInterval(() => {
+      current += step;
+      if (current >= target) { current = target; clearInterval(timer); }
+      el.textContent = Math.floor(current);
+    }, 16);
+  }
+  const counterObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting && !e.target.dataset.animated) {
+        e.target.dataset.animated = '1';
+        animateCounter(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+  // ===== SMOOTH ACTIVE NAV =====
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let cur = '';
+    sections.forEach(s => { if (window.scrollY >= s.offsetTop - 100) cur = s.id; });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + cur ? 'var(--white)' : '';
+    });
+  });
+
+  // ===== HERO PARALLAX =====
+  window.addEventListener('scroll', () => {
+    const hero = document.querySelector('.hero-globe');
+    if (hero) hero.style.transform = `translateY(calc(-50% + ${window.scrollY * 0.15}px))`;
+  });
+</script>
+</body>
+</html>
